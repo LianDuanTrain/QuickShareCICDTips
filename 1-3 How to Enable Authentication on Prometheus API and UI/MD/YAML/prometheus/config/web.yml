@@ -1,0 +1,3 @@
+#https://bcrypt-generator.com/
+basic_auth_users:
+    admin: $2a$12$Bpf2s5qEN8GlPbdOG0u8s.nTvwMHKEVXK22fsL.anHvaXTAmpL0za
