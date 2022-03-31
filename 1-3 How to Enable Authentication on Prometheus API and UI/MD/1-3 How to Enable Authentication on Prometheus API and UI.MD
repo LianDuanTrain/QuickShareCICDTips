@@ -54,7 +54,7 @@ alerting:
 ```
 - Securely Deploy Prometheus   
       -  `docker-compose up -d` 
-- Change Datastore in Grafana
+- Change Datasource in Grafana
 
 ## Verify Prometheus Basic Authentication
 - Prometheus API
