@@ -1,0 +1,220 @@
+{
+	"info": {
+		"_postman_id": "c33373f5-1587-4706-bcb8-930ee9e2ffa8",
+		"name": "GitLab",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23908"
+	},
+	"item": [
+		{
+			"name": "Get_Page_Size",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get_Page_Size\", function(){\r",
+							"   var totalPages = pm.response.headers.get(\"X-Total-Pages\")\r",
+							"   console.log(\"totalPages is \"+totalPages)\r",
+							"   pm.globals.set(\"totalPages\", totalPages);\r",
+							"   pm.globals.set(\"totalPagesIndex\", totalPages);\r",
+							"   pm.globals.set(\"pagesIndex\", 0);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{GITLabToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gitlab.com/api/v4/projects/{{projectsID}}/jobs?per_page=100",
+					"protocol": "https",
+					"host": [
+						"gitlab",
+						"com"
+					],
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"{{projectsID}}",
+						"jobs"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_Job_List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get_Job_List\", function(){\r",
+							"    var data = pm.response.json();\r",
+							"    var pagesIndex = pm.globals.get(\"pagesIndex\");\r",
+							"    var totalPagesIndex = pm.globals.get(\"totalPagesIndex\");\r",
+							"    console.log(\"pagesIndex is \"+pagesIndex)\r",
+							"    console.log(\"totalPagesIndex is \"+totalPagesIndex)\r",
+							"    // for delete\r",
+							"    var data = pm.response.json();\r",
+							"    pm.globals.set(\"jobs\",data);\r",
+							"    pm.globals.set(\"index\",0);\r",
+							"    if(totalPagesIndex>=pagesIndex) {\r",
+							"        postman.setNextRequest('Get_Job_List');\r",
+							"        postman.setNextRequest('Delete_Job_Artifact');\r",
+							"    }else {\r",
+							"        postman.setNextRequest(null);\r",
+							"}\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var pagesIndex = pm.globals.get(\"pagesIndex\");\r",
+							"pm.globals.set(\"pagesIndex\", ++pagesIndex);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{GITLabToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gitlab.com/api/v4/projects/{{projectsID}}/jobs?per_page=100&page={{pagesIndex}}",
+					"protocol": "https",
+					"host": [
+						"gitlab",
+						"com"
+					],
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"{{projectsID}}",
+						"jobs"
+					],
+					"query": [
+						{
+							"key": "per_page",
+							"value": "100"
+						},
+						{
+							"key": "page",
+							"value": "{{pagesIndex}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_Job_Artifact",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var index = pm.globals.get(\"index\");\r",
+							"pm.globals.set(\"index\", ++index);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jobs = pm.globals.get(\"jobs\");\r",
+							"var index = pm.globals.get(\"index\");\r",
+							"\r",
+							"    if(jobs.length>index) {\r",
+							"        console.log(\"Job \"+jobs[index].id+\" Has \"+jobs[index].artifacts.length +\" artifacts\");\r",
+							"        pm.globals.set(\"id\", jobs[index].id);\r",
+							"              postman.setNextRequest('Delete_Job_Artifact');\r",
+							"         }else{\r",
+							"              postman.setNextRequest('Get_Job_List');\r",
+							"         }\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{GITLabToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "PRIVATE-TOKEN",
+						"value": "glpat-MdZofnvfzFVXZpdLFewb",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://gitlab.com/api/v4/projects/{{projectsID}}/jobs/{{id}}/erase",
+					"protocol": "https",
+					"host": [
+						"gitlab",
+						"com"
+					],
+					"path": [
+						"api",
+						"v4",
+						"projects",
+						"{{projectsID}}",
+						"jobs",
+						"{{id}}",
+						"erase"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
