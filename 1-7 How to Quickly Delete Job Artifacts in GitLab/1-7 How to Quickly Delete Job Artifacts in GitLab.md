@@ -31,7 +31,10 @@
     - Project => Settings => General 
     - [<img src="./images/projectID.jpg" width="50%" />]
   - Download and Import Collection to Postman
+    - [GitLab.postman_collection.json](https://github.com/LianDuanTrain/QuickShareCICDTips/blob/main/1-7%20How%20to%20Quickly%20Delete%20Job%20Artifacts%20in%20GitLab/exerciseFile/GitLab.postman_collection.json)
   - Add Environment Parameters
+      - projectsID
+      - gitLabToken
   - Run Collection
   - Check Result
   - [<img src="./images/quotosAfter.png" width="90%" />]

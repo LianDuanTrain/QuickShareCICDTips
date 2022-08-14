@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "c33373f5-1587-4706-bcb8-930ee9e2ffa8",
+		"_postman_id": "07e104a3-b1dc-471e-9feb-5ec802876aaf",
 		"name": "GitLab",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "23908"
@@ -31,7 +31,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{GITLabToken}}",
+							"value": "{{gitLabToken}}",
 							"type": "string"
 						}
 					]
@@ -107,7 +107,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{GITLabToken}}",
+							"value": "{{gitLabToken}}",
 							"type": "string"
 						}
 					]
@@ -182,7 +182,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{GITLabToken}}",
+							"value": "{{gitLabToken}}",
 							"type": "string"
 						}
 					]
